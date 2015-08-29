@@ -66,13 +66,13 @@ int main(int argc, char *argv[])
     switch (input_type)
     {
         case 0:
-                inData.open("rural.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/rural.srtt"); 	     // open infile
                 break;
         case 1:
-                inData.open("urban.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/urban.srtt"); 	     // open infile
                 break;
         case 2:
-                inData.open("city.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/city.srtt"); 	     // open infile
                 break;
         default:
                 cout << "invalid input_type: " << input_type << endl;
@@ -414,19 +414,19 @@ int main(int argc, char *argv[])
     if (input_type == 0) // rural
     cout << "glrp-2 density1 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " 2" << endl; // gpc20150829
     if (input_type == 1) // urban
         cout << "glrp-2 density2 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " 2" << endl; // gpc20150829
     if (input_type == 2) // city
         cout << "glrp-2 density3 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " 2" << endl; // gpc20150829
     if (input_type == 3) // test
         cout << "glrp-2 test " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " 2" << endl; // gpc20150829
 
 	// close files
 	inData.close();

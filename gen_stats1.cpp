@@ -69,10 +69,10 @@ int main(int ArgumentsCount, char *argv[])
                 inData.open("../vanet-srtt/rural.srtt"); 	     // open infile
                 break;
         case 1:
-                inData.open("urban.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/urban.srtt"); 	     // open infile
                 break;
         case 2:
-                inData.open("city.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/city.srtt"); 	     // open infile
                 break;
         default:
                 cout << "invalid input_type: " << input_type << endl;
@@ -275,7 +275,6 @@ int main(int ArgumentsCount, char *argv[])
     float avg_max_k = 0; //gpc20150829
     for (int i=0; i<zone_qty; i++) avg_max_k += k_size_max[i];  //gpc20150829
     avg_max_k = float(avg_max_k) / zone_qty; //gpc20150829
-    for (int i=0; i<zone_qty; i++) cout << k_size_max[i] << " ";
     
     if (input_type == 0) // rural
     cout << "smp-r density1 " << radius << " " << zone_qty << setprecision(5) 

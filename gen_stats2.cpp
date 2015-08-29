@@ -1,4 +1,3 @@
-// filename    : gen_stats2.cpp
 //               same as gen_stats.cpp except random times (see rand_times())
 // author      : george corser, 2015-02-10, rev:2015-02-27
 // description : this program reads .srtt file (form: t, v, x, y, begin, end)
@@ -9,6 +8,7 @@
 //               command line arguments: ./a.out radius zone_qty
 //               edit, recompile to access correct input file, e.g. rural
 // output      : same as input file but with times appended to each line
+// model       : SMP-I
 
 // overall design: main() function...
     // initialize command line variables
@@ -63,13 +63,13 @@ int main(int argc, char *argv[])
     switch (input_type)
     {
         case 0:
-                inData.open("rural.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/rural.srtt"); 	     // open infile
                 break;
         case 1:
-                inData.open("urban.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/urban.srtt"); 	     // open infile
                 break;
         case 2:
-                inData.open("city.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/city.srtt"); 	     // open infile
                 break;
         default:
                 cout << "invalid input_type: " << input_type << endl;
@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
 		if (v>maxv) maxv=v;
 		if (t>maxt) maxt=t;
     }
+
+    
     int zone_time = maxt/zone_qty;
     int assign_delay = 0;
     // int silent = zone_time;
@@ -114,6 +116,7 @@ int main(int argc, char *argv[])
     int k_silent_t[zone_qty]; // start of silent period
     int k_resume_t[zone_qty]; // time vehicle is anonymized and LBS-connected
     int k_size[zone_qty];     // size of anon set
+    int k_size_max[zone_qty]; // highest value of the anon set gpc20150829
 
     for (int i=0; i<zone_qty; i++) k_assign_x[i] = temp_x;
     for (int i=0; i<zone_qty; i++) k_assign_y[i] = temp_y;
@@ -123,6 +126,7 @@ int main(int argc, char *argv[])
     for (int i=0; i<zone_qty; i++) k_silent_t[i] = k_assign_t[i] + assign_delay;
     for (int i=0; i<zone_qty; i++) k_resume_t[i] = k_silent_t[i] + silent;
     for (int i=0; i<zone_qty; i++) k_size[i]     = 0; 
+    for (int i=0; i<zone_qty; i++) k_size_max[i] = 0; // gpc20150829
 
     // declare and initialize vehicle stat arrays
     int v_begin_t[maxv+1];
@@ -215,6 +219,7 @@ int main(int argc, char *argv[])
                     v_k_id[v] = k_id;
                     // increment size of current anon set
                     k_size[k_id]++;
+                    k_size_max[k_id]++; //gpc20150829
                     // set assign time, x, t to current time, x, y
                     v_k_assign_t[v] = t;
                     v_k_assign_x[v] = x;
@@ -258,22 +263,28 @@ int main(int argc, char *argv[])
             avg_d += out_d;
             avg_k += out_k;
         }
+
     avg_k = float(avg_k) / counter;
     avg_d = float(avg_d) / counter;
     avg_t = float(avg_t) / counter;
     // rev:2015-02-27 - changed "smz" to "smzrt"
+    
+    float avg_max_k = 0; //gpc20150829
+    for (int i=0; i<zone_qty; i++) avg_max_k += k_size_max[i];  //gpc20150829
+    avg_max_k = float(avg_max_k) / zone_qty; //gpc20150829
+    
     if (input_type == 0) // rural
     cout << "smp-i density1 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " " << avg_max_k << endl; //gpc20150829
     if (input_type == 1) // urban
         cout << "smp-i density2 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " " << avg_max_k << endl; //gpc20150829
     if (input_type == 2) // city
         cout << "smp-i density3 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " " << avg_max_k << endl; //gpc20150829
 
 	// close files
 	inData.close();
