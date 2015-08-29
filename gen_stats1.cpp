@@ -8,6 +8,7 @@
 //               edit, recompile to access correct input file, e.g. rural
 // output      : same as input file but with times appended to each line
 //               (output form: v, k, d, t)
+// model       : SMP-R
 //
 // rev:2015-03-21
 // use ./gen.sh to run this program in batch mode
@@ -48,8 +49,13 @@ float get_avgdist(int v, int x, int y, int k_id, int k_size, int v_k_id[],
     int v_current_x[], int v_current_y[], int v_terminated[], int maxv);
 
 // function: main ------------------------------------------------------------
-int main(int argc, char *argv[])
+int main(int ArgumentsCount, char *argv[])
 {
+    if(ArgumentsCount!=4)
+    {
+        cout<<"ERROR: Please supply four arguments. (Had "<<ArgumentsCount<<")."<<endl;
+        return 1;
+    }
     // initialize command line variables
 	int zone_qty   = atoi(argv[2]);  // 50 zones x 40 sec == 2000 sec
 	int radius     = atoi(argv[1]);  // anon set radius, in meters
@@ -60,7 +66,7 @@ int main(int argc, char *argv[])
     switch (input_type)
     {
         case 0:
-                inData.open("rural.srtt"); 	     // open infile
+                inData.open("../vanet-srtt/rural.srtt"); 	     // open infile
                 break;
         case 1:
                 inData.open("urban.srtt"); 	     // open infile
@@ -112,6 +118,7 @@ int main(int argc, char *argv[])
     int k_silent_t[zone_qty]; // start of silent period
     int k_resume_t[zone_qty]; // time vehicle is anonymized and LBS-connected
     int k_size[zone_qty];     // size of anon set
+    int k_size_max[zone_qty]; // highest value of the anon set gpc20150829
 
     for (int i=0; i<zone_qty; i++) k_assign_x[i] = temp_x;
     for (int i=0; i<zone_qty; i++) k_assign_y[i] = temp_y;
@@ -120,6 +127,7 @@ int main(int argc, char *argv[])
     for (int i=0; i<zone_qty; i++) k_silent_t[i] = k_assign_t[i] + assign_delay;
     for (int i=0; i<zone_qty; i++) k_resume_t[i] = k_silent_t[i] + silent;
     for (int i=0; i<zone_qty; i++) k_size[i]     = 0; 
+    for (int i=0; i<zone_qty; i++) k_size_max[i] = 0; // gpc20150829
 
     // declare and initialize vehicle stat arrays
     int v_begin_t[maxv+1];
@@ -212,8 +220,10 @@ int main(int argc, char *argv[])
                     anoncount++;
                     // assign anon set id to vehicle
                     v_k_id[v] = k_id;
-                    // increment size of current anon set
+                    // increment size of current anon setls 
+                    
                     k_size[k_id]++;
+                    k_size_max[k_id]++; //gpc20150829
                     // set assign time, x, t to current time, x, y
                     v_k_assign_t[v] = t;
                     v_k_assign_x[v] = x;
@@ -261,18 +271,24 @@ int main(int argc, char *argv[])
     avg_k = float(avg_k) / counter;
     avg_d = float(avg_d) / counter;
     avg_t = float(avg_t) / counter;
+    
+    float avg_max_k = 0; //gpc20150829
+    for (int i=0; i<zone_qty; i++) avg_max_k += k_size_max[i];  //gpc20150829
+    avg_max_k = float(avg_max_k) / zone_qty; //gpc20150829
+    for (int i=0; i<zone_qty; i++) cout << k_size_max[i] << " ";
+    
     if (input_type == 0) // rural
     cout << "smp-r density1 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " " << avg_max_k << endl; //gpc20150829
     if (input_type == 1) // urban
         cout << "smp-r density2 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " " << avg_max_k << endl; //gpc20150829
     if (input_type == 2) // city
         cout << "smp-r density3 " << radius << " " << zone_qty << setprecision(5) 
         << fixed << " " << avg_k << " " << avg_d << " " << avg_t 
-        << " " << anoncount << " " << maxv << endl;
+        << " " << anoncount << " " << maxv << " " << avg_max_k << endl; //gpc20150829
 
 
 
