@@ -1,9 +1,10 @@
-//               same as gen_stats.cpp except random times (see rand_times())
+// filename    : gen_stats2.cpp (SMP-I)
 // author      : george corser, 2015-02-10, rev:2015-02-27
 // description : this program reads .srtt file (form: t, v, x, y, begin, end)
 //               then computes stats for each vehicle (k, d, t)
 //               and writes the output to a .stat file
 //               (form: v, k, d, t)
+//               same as gen_stats.cpp except random times (see rand_times())
 // input       : sorted trace file, e.g. rural.srtt, urban.srtt, city.srtt
 //               command line arguments: ./a.out radius zone_qty
 //               edit, recompile to access correct input file, e.g. rural

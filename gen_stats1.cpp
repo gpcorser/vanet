@@ -1,8 +1,8 @@
-// filename    : gen_stats1.cpp
+// filename    : gen_stats1.cpp (SMP-R)
 // author      : george corser, 2015-02-10
 // description : this program reads .srtt file (form: t, v, x, y, begin, end)
 //               then computes stats for each vehicle (k, d, t)
-//               and writes the output to a file
+//               and writes the output to a file 
 // input       : sorted trace file, e.g. rural.srtt, urban.srtt, city.srtt
 //               command line arguments: ./a.out radius zone_qty
 //               edit, recompile to access correct input file, e.g. rural

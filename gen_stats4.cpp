@@ -1,4 +1,4 @@
-// filename    : gen_stats4.cpp
+// filename    : gen_stats4.cpp (OTF-I)
 //               same as gen_stats.cpp except random times (see rand_times())
 //               AND random locations
 // author      : george corser, 2015-02-10, rev:2015-02-27, rev:2015-02-28

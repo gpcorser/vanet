@@ -1,4 +1,4 @@
-// filename    : gen_stats3.cpp
+// filename    : gen_stats3.cpp (OTF-R)
 //               same as gen_stats.cpp except 
 //               random locations re:2015-02-28
 // author      : george corser, 2015-02-10, rev:2015-02-27, rev:2015-02-28

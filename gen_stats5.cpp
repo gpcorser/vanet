@@ -1,4 +1,4 @@
-// filename    : gen_stats5.cpp
+// filename    : gen_stats5.cpp (GLRP-2)
 //               similar to gen_stats.cpp except continuous times
 //               AND contiguous locations (GLRZ: group leader relay zone)
 //               members join in pairs
